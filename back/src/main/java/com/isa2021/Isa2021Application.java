@@ -9,5 +9,4 @@ public class Isa2021Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Isa2021Application.class, args);
 	}
-
 }
