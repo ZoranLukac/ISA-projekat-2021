@@ -40,8 +40,7 @@ public class RobaIliUsluga {
 	private List<Zalba> listaZalbi = new ArrayList<Zalba>();
 	@ElementCollection(targetClass = String.class)
 	private List<String> usloviOtkazivanjaRezervacije = new ArrayList<String>();
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="pravila", referencedColumnName="id")
+	@OneToMany(mappedBy="robaIliUsluga", cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Pravilo> listaPravila = new ArrayList<Pravilo>();	
 	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="cenovnik_id", referencedColumnName="id")

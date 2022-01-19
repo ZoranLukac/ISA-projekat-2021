@@ -20,53 +20,42 @@ import javax.validation.Valid;
 import com.isa2021.exceptions.ResourceNotFoundException;
 import com.isa2021.model.Administrator;
 import com.isa2021.repository.AdministratorRepository;
+import com.isa2021.service.AdministratorService;
 
 @RestController
 @RequestMapping("/admin")
 public class AdministratorController {
 
-	@Autowired
-	private AdministratorRepository administratorRepository;
+//	@Autowired
+//	private AdministratorRepository administratorRepository;
+	@Autowired 
+	private AdministratorService administratorService;
 	
-	//get all
+	//get all admin
 	@GetMapping("")
 	public List<Administrator> getAllAdministrators(){
-		return this.administratorRepository.findAll();
+		return this.administratorService.administratorRepository.findAll();
+		//return this.administratorService.administratorRepository.findAll();
 	}
 	//get admin by id
 	@GetMapping("/{id}")
 	public ResponseEntity<Administrator> getAdministratorById(@PathVariable(value = "id") String adminId) throws ResourceNotFoundException{
-		Administrator administrator = administratorRepository.findById(adminId).orElseThrow(() -> new ResourceNotFoundException("No administrator with id: " + adminId));
-		return ResponseEntity.ok().body(administrator);
+		return this.administratorService.getAdministratorById(adminId);
 	}
 	
 	//save admin
 	@PostMapping("")
 	public Administrator createAdministrator(@RequestBody Administrator admin) {
-		return this.administratorRepository.save(admin);
+		return this.administratorService.administratorRepository.save(admin);
 	}
 	//update admin
 	@PutMapping("/{id}")
 	public ResponseEntity<Administrator> updateAdministrator(@PathVariable(value="id") String administratorId, @Valid @RequestBody Administrator administratorBody) throws ResourceNotFoundException{
-		Administrator admin = this.administratorRepository.findById(administratorId).orElseThrow(() -> new ResourceNotFoundException("No administrator with id: " + administratorId));
-		admin.setAdresa(administratorBody.getAdresa());
-		admin.setBrojTelefona(administratorBody.getBrojTelefona());
-		admin.setEmailAdresa(administratorBody.getEmailAdresa());
-		admin.setIme(administratorBody.getIme());
-		admin.setPrezime(administratorBody.getPrezime());
-		admin.setPassword(administratorBody.getPassword());
-		admin.setListaKomentara(administratorBody.getListaKomentara());
-		admin.setListaZahteva(administratorBody.getListaZahteva());
-		admin.setListaZalbi(administratorBody.getListaZalbi());
-		return ResponseEntity.ok(this.administratorRepository.save(admin));
+		return this.administratorService.updateAdministrator(administratorId, administratorBody);
 	}
 	@DeleteMapping("/{id}")
 	public Map<String, Boolean> deleteAdministrator(@PathVariable(value="id") String administratorId) throws ResourceNotFoundException{
-		Administrator admin = this.administratorRepository.findById(administratorId).orElseThrow(() -> new ResourceNotFoundException("No administrator with id: " + administratorId));
-		this.administratorRepository.delete(admin);
-		Map<String, Boolean> response = new HashMap<>();
-		response.put("deleted", Boolean.TRUE);
-		return response;
+		return this.administratorService.deleteAdministrator(administratorId);
 	}
 	
 }
